@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // API URLs
 const API_URL = "https://news.grgsuman.com.np/api/";
@@ -14,79 +13,66 @@ const kBlack = Color(0xFF1C1C1C);
 const kFallbackImageSource = 'assets/newspaper.png';
 const kDrawerImageSource = 'assets/drawer_bg.png';
 
-var kDrawerkHeaderStyle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 18.0,
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    shadows: <Shadow>[
-      Shadow(
-        blurRadius: 10.0,
-        color: kBlack,
-        offset: Offset(5.0, 5.0),
-      ),
-    ],
-  ),
+var kDrawerkHeaderStyle = TextStyle(
+  fontSize: 18.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  shadows: <Shadow>[
+    Shadow(
+      blurRadius: 10.0,
+      color: kBlack,
+      offset: Offset(5.0, 5.0),
+    ),
+  ],
 );
 
-var kNonActiveTabStyle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 14.0,
-    color: kGrey2,
-    fontWeight: FontWeight.bold,
-  ),
+var kNonActiveTabStyle = TextStyle(
+  fontSize: 14.0,
+  color: kGrey2,
+  fontWeight: FontWeight.bold,
 );
 
-var kHeaderStyle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 16.0,
-    color: kBlack,
-    fontWeight: FontWeight.bold,
-  ),
+var kHeaderStyle = TextStyle(
+  fontSize: 16.0,
+  color: kBlack,
+  fontWeight: FontWeight.bold,
 );
 
-var kHeaderButton = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 16.0,
-    color: Colors.blue,
-    fontWeight: FontWeight.normal,
-  ),
+var kHeaderButton = TextStyle(
+  fontSize: 16.0,
+  color: Colors.blue,
+  fontWeight: FontWeight.normal,
 );
 
-var kCategoryTitle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 18.0,
-    color: kGrey2,
-    fontWeight: FontWeight.bold,
-  ),
+var kCategoryTitle = TextStyle(
+  fontSize: 18.0,
+  color: kGrey2,
+  fontWeight: FontWeight.bold,
 );
 
-var kCategorySubtitle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 14.0,
-    color: kGrey2,
-    fontWeight: FontWeight.normal,
-  ),
+var kCategorySubtitle = TextStyle(
+  fontSize: 14.0,
+  color: kGrey2,
+  fontWeight: FontWeight.normal,
 );
 
-var kDetailContent = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 12.0,
-    color: kGrey2,
-  ),
+var kDetailContent = TextStyle(
+  fontSize: 12.0,
+  color: kGrey2,
+  decoration: TextDecoration.none,
+  fontWeight: FontWeight.normal,
+  fontFamily: 'Raleway',
 );
 
-var kTitleCard = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 16.0,
-    color: kGrey2,
-    fontWeight: FontWeight.bold,
-  ),
+var kTitleCard = TextStyle(
+  fontSize: 16.0,
+  color: kGrey2,
+  fontWeight: FontWeight.bold,
+  decoration: TextDecoration.none,
+  fontFamily: 'Raleway',
 );
 
-var kDescriptionStyle = GoogleFonts.raleway(
-  textStyle: TextStyle(
-    fontSize: 15.0,
-    height: 2.0,
-  ),
+var kDescriptionStyle = TextStyle(
+  fontSize: 15.0,
+  height: 2.0,
 );

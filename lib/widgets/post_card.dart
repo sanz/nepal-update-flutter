@@ -4,8 +4,13 @@ import 'package:nepalupdate/constants.dart';
 import 'package:nepalupdate/arguments/webview.dart';
 
 class PostCard extends StatelessWidget {
+  final Map<String, dynamic> website;
   final Map<String, dynamic> post;
-  PostCard(this.post);
+
+  PostCard({
+    this.website,
+    this.post,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +19,9 @@ class PostCard extends StatelessWidget {
         Navigator.of(context).pushNamed(
           '/webview',
           arguments: WebViewArguments(
-            this.post['website']['title'],
-            this.post['url'],
-            this.post['website']['image'],
+            title: this.website['title'],
+            image: this.website['image'],
+            url: this.post['url'],
           ),
         );
       },

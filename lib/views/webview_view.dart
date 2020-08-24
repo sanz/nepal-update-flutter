@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:async';
+import 'package:share/share.dart';
 
 import 'package:nepalupdate/constants.dart';
 
@@ -72,6 +74,34 @@ class _WebviewViewState extends State<WebviewView> {
       iconTheme: new IconThemeData(
         color: Colors.black,
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () {
+            Share.share(widget.url, subject: widget.title);
+          },
+        ),
+        FutureBuilder<WebViewController>(
+          future: _controller.future,
+          builder: (BuildContext context,
+              AsyncSnapshot<WebViewController> snapshot) {
+            final bool webViewReady =
+                snapshot.connectionState == ConnectionState.done;
+            final WebViewController controller = snapshot.data;
+            return IconButton(
+              icon: const Icon(Icons.replay),
+              onPressed: () {
+                if (webViewReady) {
+                  setState(() {
+                    this.isLoading = true;
+                  });
+                  controller.reload();
+                }
+              },
+            );
+          },
+        )
+      ],
     );
   }
 

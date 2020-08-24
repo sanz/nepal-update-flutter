@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 
 import 'package:nepalupdate/constants.dart';
 import 'package:nepalupdate/widgets/featured_items.dart';
@@ -14,11 +13,18 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  DioCacheManager cacheManager;
   Future<List<dynamic>> items;
 
   Future<List<dynamic>> fetchItems() async {
-    final response = await http.get(API_HOME);
-    return json.decode(response.body);
+    cacheManager = DioCacheManager(CacheConfig());
+    Options options = buildCacheOptions(Duration(days: 1));
+
+    Dio dio = Dio();
+    dio.interceptors.add(cacheManager.interceptor);
+    Response response = await dio.get(API_HOME, options: options);
+
+    return response.data;
   }
 
   @override
@@ -50,25 +56,27 @@ class _HomeViewState extends State<HomeView> {
         FutureBuilder<List<dynamic>>(
           future: this.items,
           builder: (context, snapshot) {
-            var onSearchPressed = () {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text("Contents are loading! Please wait..."),
-              ));
-            };
+            Function onSearchPressed = () {};
 
             if (snapshot.hasData) {
               onSearchPressed = () {
                 List<dynamic> websites = List();
 
-                snapshot.data
-                    .forEach((item) => websites.addAll(item['websites']));
+                snapshot.data.forEach(
+                  (item) => websites.addAll(item['websites']),
+                );
 
-                showSearch(context: context, delegate: WebsiteSearch(websites));
+                showSearch(
+                  context: context,
+                  delegate: WebsiteSearch(websites),
+                );
               };
             }
 
             return IconButton(
-                icon: Icon(Icons.search), onPressed: onSearchPressed);
+              icon: Icon(Icons.search),
+              onPressed: onSearchPressed,
+            );
           },
         ),
       ],
@@ -81,35 +89,44 @@ class _HomeViewState extends State<HomeView> {
       child: FutureBuilder<List<dynamic>>(
         future: this.items,
         builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
+
           if (snapshot.hasData) {
-            return homeListItemBuilder(snapshot);
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                var item = snapshot.data[index];
+                return FeaturedItems(item);
+              },
+            );
           }
 
-          if (snapshot.hasError) {
-            if (snapshot.error is IOException) {
-              Navigator.of(context).pushNamed('/no_internet');
-            }
-
-            print(snapshot.error);
-            return Text("Something went wrong.");
-          }
-
-          // By default, show a loading spinner.
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          print(snapshot.error);
+          return buildRetry();
         },
       ),
     );
   }
 
-  ListView homeListItemBuilder(AsyncSnapshot<List> snapshot) {
-    return ListView.builder(
-      itemCount: snapshot.data.length,
-      itemBuilder: (context, index) {
-        var item = snapshot.data[index];
-        return FeaturedItems(item);
-      },
+  Center buildRetry() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Fetching contents failed! Please try again."),
+          SizedBox(height: 10.0),
+          OutlineButton(
+            onPressed: () {
+              setState(() {
+                this.items = this.fetchItems();
+              });
+            },
+            child: Text("Retry"),
+          ),
+        ],
+      ),
     );
   }
 

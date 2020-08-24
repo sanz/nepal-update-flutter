@@ -6,5 +6,5 @@ class WebViewArguments {
   final String url;
   final String image;
 
-  WebViewArguments(this.title, this.url, this.image);
+  WebViewArguments({this.title, this.url, this.image});
 }

@@ -12,7 +12,7 @@ import 'package:nepalupdate/constants.dart';
 import 'package:nepalupdate/widgets/post_card.dart';
 
 class WebsiteView extends StatefulWidget {
-  final website;
+  final Map<String, dynamic> website;
 
   WebsiteView({
     Key key,
@@ -70,7 +70,10 @@ class _WebsiteViewState extends State<WebsiteView> {
   }
 
   Widget listItemBuilder(post, int index) {
-    return PostCard(post);
+    return PostCard(
+      website: widget.website,
+      post: post,
+    );
   }
 
   Widget loadingWidgetMaker() {
@@ -89,10 +92,10 @@ class _WebsiteViewState extends State<WebsiteView> {
           padding: const EdgeInsets.all(16.0),
           child: Text(postsData.errorMessage),
         ),
-        FlatButton(
+        OutlineButton(
           onPressed: retryListener,
-          child: Text('Retry'),
-        )
+          child: Text("Retry"),
+        ),
       ],
     );
   }

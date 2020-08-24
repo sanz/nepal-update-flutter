@@ -15,14 +15,17 @@ class WebsiteCard extends StatelessWidget {
         bool hasPosts = this.website['has_posts'];
 
         if (hasPosts) {
-          Navigator.of(context).pushNamed('/website', arguments: this.website);
+          Navigator.of(context).pushNamed(
+            '/website',
+            arguments: this.website,
+          );
         } else {
           Navigator.of(context).pushNamed(
             '/webview',
             arguments: WebViewArguments(
-              this.website['title'],
-              this.website['url'],
-              this.website['image'],
+              title: this.website['title'],
+              url: this.website['url'],
+              image: this.website['image'],
             ),
           );
         }
@@ -42,21 +45,24 @@ class HeroContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        border: Border.all(
-          color: kGrey3,
-          width: 2.0,
+    return Hero(
+      tag: this.website['id'],
+      child: Container(
+        width: 250.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: Border.all(
+            color: kGrey3,
+            width: 2.0,
+          ),
         ),
-      ),
-      padding: EdgeInsets.all(10.0),
-      child: Stack(
-        children: <Widget>[
-          buildContents(),
-          if (this.website['has_posts']) buildBadge(),
-        ],
+        padding: EdgeInsets.all(10.0),
+        child: Stack(
+          children: <Widget>[
+            buildContents(),
+            if (this.hasPosts()) buildBadge(),
+          ],
+        ),
       ),
     );
   }
@@ -84,7 +90,7 @@ class HeroContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildHero(),
+          buildImage(),
           SizedBox(height: 5.0),
           Text(
             this.website['title'],
@@ -103,30 +109,31 @@ class HeroContent extends StatelessWidget {
     );
   }
 
-  Expanded buildHero() {
+  Expanded buildImage() {
     String image = this.website['image'];
 
     return Expanded(
-      child: Hero(
-        tag: this.website['id'],
-        child: CachedNetworkImage(
-          imageUrl: image,
-          imageBuilder: (context, imageProvider) => Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.contain,
-                )),
-          ),
-          placeholder: (context, url) => Image(
-            image: AssetImage(kFallbackImageSource),
-            fit: BoxFit.contain,
-            width: double.infinity,
-          ),
+      child: CachedNetworkImage(
+        imageUrl: image,
+        imageBuilder: (context, imageProvider) => Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.contain,
+              )),
+        ),
+        placeholder: (context, url) => Image(
+          image: AssetImage(kFallbackImageSource),
+          fit: BoxFit.contain,
+          width: double.infinity,
         ),
       ),
     );
+  }
+
+  bool hasPosts() {
+    return this.website['has_posts'];
   }
 }

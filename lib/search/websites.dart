@@ -45,9 +45,9 @@ class WebsiteSearch extends SearchDelegate {
     List<dynamic> suggestions = [];
 
     if (query.isNotEmpty) {
-      var filtered = this.websites.where((element) {
-        return element['title'].contains(query) ||
-            element['url'].contains(query);
+      var filtered = this.websites.where((website) {
+        return website['title'].contains(query) ||
+            website['url'].contains(query);
       });
 
       suggestions.addAll(filtered);
@@ -67,7 +67,7 @@ class WebsiteSearch extends SearchDelegate {
               ),
               Text(
                 suggestions[index]['description'],
-                style: kCategorySubtitle,
+                style: kDetailContent,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -77,8 +77,8 @@ class WebsiteSearch extends SearchDelegate {
             imageBuilder: (context, imageProvider) => Image(
               image: imageProvider,
               fit: BoxFit.contain,
-              width: 60,
-              height: 30,
+              width: 50,
+              height: 25,
             ),
           ),
           onTap: () {
@@ -91,9 +91,9 @@ class WebsiteSearch extends SearchDelegate {
               Navigator.of(context).pushNamed(
                 '/webview',
                 arguments: WebViewArguments(
-                  website['title'],
-                  website['url'],
-                  website['image'],
+                  title: website['title'],
+                  url: website['url'],
+                  image: website['image'],
                 ),
               );
             }
